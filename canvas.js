@@ -1,45 +1,34 @@
-/**
- * Created by windows7 on 2015/7/30.
- */
-function p(d,n,p,e){
-    if(n<0)
-       return;
-    d.innerHTML+= e.clientX+","+e.clientY+"  ";
-    setTimeout(p(d,n-1,p,e),1000);
+function loadPage(){
+    var can=document.getElementById("can");
+    var cans=can.getContext("2d");
+    var flag = false;
+    cans.lineWidth=2;
+    cans.strokeStyle='red';
+    //cans.globalAlpha = 0.5;
+    can.setAttribute("width",window.screen.width);
+    can.setAttribute("height",window.screen.height*3);
+    can.onmousedown = function (event) {
+        flag=true;
+        x=event.offsetX;
+        y=event.offsetY;
+        cans.beginPath();
+        cans.moveTo(x,y)
+    };
+    can.onmouseup = function () {
+        flag = false;
+        cans.closePath();
+    };
+    can.onmousemove = function (event) {
+        if(flag){
+            x= event.offsetX;
+            y= event.offsetY;
+            paint([x,y],cans);
+        }
+    };
 }
-function pageLoad(){
-    var can = document.getElementById('can');
-    var cans = can.getContext('2d');
-    var d = document.getElementById("p");
-    var poin=[]
-    cans.moveTo(20,30);//第一个起点
-    //cans.lineTo(120,90);//第二个点
-    ////cans.lineTo(220,60);//第三个点（以第二个点为起点）
-    //cans.lineWidth=3;
-    //cans.strokeStyle = 'red';
-    //cans.stroke();
-    var flag = 0;
-    can.onmousedown = function(e){
-        var event = window.event || e;
-        var x=event.clientX;
-        var y=event.clientY;
-        cans.lineWidth=3;
-        cans.strokeStyle = 'red';
-        flag = 1;
-        //if(flag == 1){
-        //    //cans.lineTo(x,y);
-        //    //cans.stroke();
-        //
-        //    d.innerHTML+= e.clientX+","+e.clientY+"  ";
-        //}
-        setTimeout(p(d,10,poin,e),2000);
-    };
-    can.onmouseup=function(e){
-        for(var i=0;i<poin.length;i++)
-            d.innerHTML +=poin[i];
-    };
-    can.onmouseover = function (e) {
-        //var dd = document.getElementById("p");
-        //dd.innerHTML+= e.clientX+","+e.clientY+"  ";
-    }
+function paint(point,can){
+    can.lineTo(point[0],point[1]);
+    can.moveTo(point[0],point[1]);
+    can.closePath();
+    can.stroke();
 }
